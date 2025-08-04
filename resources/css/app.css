@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* ----- Basic Body Styles ----- */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    padding: 20px; /* Додаємо внутрішній відступ, щоб контент не прилипав до країв */
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* ----- Headings ----- */
+h1, h2, h3 {
+    color: #0056b3;
+    margin-bottom: 15px;
+}
+
+/* ----- Links ----- */
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* ----- HR Separator ----- */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #eee;
+    margin: 20px 0;
+}
+
+/* ----- Form Styles ----- */
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group input[type="file"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.form-group button {
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.form-group button:hover {
+    background-color: #0056b3;
+}
+.error-message {
+    color: #dc3545; /* Red color for errors */
+    font-size: 0.875em;
+    margin-top: 5px;
+}
+
+/* ----- Success Message ----- */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+
+/* ----- Container for content ----- */
+.container {
+    max-width: 1200px; /* Обмежуємо ширину контенту */
+    margin: 0 auto; /* Центруємо контейнер */
+    padding: 0 15px; /* Додаємо невеликі внутрішні відступи з боків */
+}
+
+/* ----- Admin Actions (Edit/Delete buttons) ----- */
+.product-actions {
+    display: flex; /* Use flexbox for alignment */
+    gap: 10px; /* Space between buttons */
+    margin-top: 15px;
+}
+
+/* ----- Header for the whole page (page-header) ----- */
+.page-header {
+    background-color: #e0f2f7; /* Light blue background */
+    padding: 20px;
+    border-bottom: 1px solid #b3e0ed;
+    margin-bottom: 30px;
+    text-align: center;
+}
+.page-header h1 {
+    color: #0056b3;
+    margin: 0;
+}
+.page-header a {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 1.1em;
+}
+
+/* ----- Simple Header/Nav Bar ----- */
+nav {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .logo img {
+    height: 40px; /* Adjust as needed */
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+    background-color: transparent; /* Override li styling for products */
+    box-shadow: none;
+    border: none;
+    padding: 0;
+}
+
+nav ul li a {
+    color: #fff;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    color: #007bff;
+}
+
+/* ----- Product Grid Styles ----- */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 4 колонки, якщо є місце */
+    gap: 20px; /* Відстань між картками */
+    margin-top: 30px;
+}
+
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex; /* Для вирівнювання контенту всередині картки */
+    flex-direction: column;
+    justify-content: space-between; /* Розміщення вмісту по вертикалі */
+}
+
+.product-card h3 {
+    font-size: 1.3em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.product-card .product-image {
+    max-width: 100%;
+    height: 180px; /* Фіксована висота зображення */
+    object-fit: contain; /* Зберігає співвідношення сторін і вписує зображення */
+    border-radius: 4px;
+    margin: 15px auto; /* Центруємо зображення */
+}
+
+.product-card .no-image-placeholder {
+    height: 180px; /* Така ж висота, як для зображень */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f0f0f0;
+    color: #888;
+    border-radius: 4px;
+    margin: 15px auto;
+    font-style: italic;
+}
+
+.product-card .product-price {
+    font-size: 1.2em;
+    color: #007bff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-card .product-description {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 15px;
+    flex-grow: 1; /* Опис може займати більше місця */
+}
+
+.product-card .product-stock {
+    font-size: 0.85em;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.product-card .product-actions {
+    margin-top: auto; /* Притискає кнопки до низу картки */
+    display: flex;
+    justify-content: center; /* Центруємо кнопки */
+    gap: 10px;
+}
+
+/* Адаптивність для менших екранів */
+@media (max-width: 992px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* 3 або 2 колонки */
+    }
+}
+
+@media (max-width: 768px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 2 колонки */
+    }
+    .product-card {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    .products-grid {
+        grid-template-columns: 1fr; /* 1 колонка на мобільних */
+    }
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 0 10px;
+    }
+}
+
+/* ----- Dashboard Specific Styles ----- */
+.my-page-section {
+    padding-top: 3rem; /* Еквівалент py-12 */
+    padding-bottom: 3rem;
+}
+
+.my-container {
+    max-width: 960px; /* Ваш вже існуючий .container */
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.my-card {
+    background-color: #f0f8ff; /* Light blue background for dashboard card */
+    border: 1px solid #c0d9e7;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    overflow: hidden; /* Щоб тіні працювали коректно */
+}
+
+.my-card-content {
+    padding: 24px; /* Еквівалент p-6 */
+    color: #444; /* Колір тексту, темніший */
+}
+
+.my-card-content h2 {
+    color: #0056b3; /* Наслідує H2 */
+    margin-bottom: 20px;
+}
+
+.my-action-buttons {
+    margin-top: 20px;
+}

@@ -3,36 +3,49 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
 */
 
-// Цей маршрут тепер показує список продуктів, роблячи його "головною" сторінкою магазину.
-// Він викликає метод 'index' контролера ProductController.
+// Головна сторінка, що показує список продуктів
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
-// Дашборд доступний лише для авторизованих користувачів, верифікацію email ми прибрали.
+// Дашборд для авторизованих користувачів
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-// Маршрути для профілю, доступні тільки після авторизації.
+// Маршрути для профілю
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::patch('/profile', 'ProfileController@update')->name('profile.update');
+    Route::delete('/profile', 'ProfileController@destroy')->name('profile.destroy');
 });
 
-// Маршрути для управління продуктами - тепер вони доступні для всіх!
-// Всі CRUD-операції (створення, редагування, видалення) будуть захищені ролями у самому контролері.
+// Маршрути для управління продуктами
 Route::resource('products', ProductController::class);
+
+// --- Маршрути для кошика ---
+// Додавання товару в кошик
+Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+// Відображення сторінки кошика
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+// Оновлення кількості товару в кошику
+Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
+// Видалення товару з кошика
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
+// --- Нові маршрути для статичних сторінок ---
+Route::get('/about-us', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 
 require __DIR__.'/auth.php';

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -63,9 +64,8 @@ class ProductController extends Controller
      */
     public function show(Product $product) // Змінено: Product $product
     {
-        // Для show методу ми можемо відобразити деталі одного продукту.
-        // Це поки не реалізовано, але аргумент Product $product вже готовий.
-        // return view('products.show', compact('product'));
+        // Метод show() автоматично отримує модель Product завдяки Model Binding.
+        return view('products.show', compact('product'));
     }
 
     /**

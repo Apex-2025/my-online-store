@@ -24,6 +24,15 @@
                             @enderror
                         </div>
 
+                        {{-- Поле для номера телефону --}}
+                        <div class="mb-4">
+                            <label for="phone_number" class="block text-gray-700 text-sm font-bold mb-2">Номер телефону</label>
+                            <input id="phone_number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" name="phone_number" value="{{ old('phone_number') }}" autocomplete="tel" required>
+                            @error('phone_number')
+                            <p class="text-red-500 text-xs italic mt-2">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <div class="mb-4">
                             <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Пароль</label>
                             <input id="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="password" name="password" required autocomplete="new-password">

@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class CartController extends Controller
 {
@@ -174,5 +176,124 @@ class CartController extends Controller
             }
             Session::forget('cart');
         }
+    }
+
+    /**
+     * Відображає сторінку оформлення замовлення.
+     */
+    public function checkout()
+    {
+        // Логіка для отримання товарів з кошика та загальної суми
+        // Ця логіка є ідентичною тій, що в методі 'index'
+        $cartItems = [];
+        $totalPrice = 0;
+
+        if (Auth::check()) {
+            $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
+        } else {
+            $sessionCart = Session::get('cart', []);
+            $productIds = collect($sessionCart)->pluck('product_id');
+            $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+
+            foreach ($sessionCart as $item) {
+                if ($products->has($item['product_id'])) {
+                    $cartItems[] = (object)[
+                        'product' => $products->get($item['product_id']),
+                        'quantity' => $item['quantity'],
+                    ];
+                }
+            }
+        }
+
+        foreach ($cartItems as $item) {
+            $productPrice = $item->product->price ?? 0;
+            $quantity = $item->quantity ?? 0;
+            $totalPrice += $productPrice * $quantity;
+        }
+
+        // Перенаправлення, якщо кошик порожній
+        if (empty($cartItems) || count($cartItems) === 0) {
+            return redirect()->route('cart.index')->with('error', 'Ваш кошик порожній.');
+        }
+
+        $user = Auth::user();
+
+        return view('checkout.index', compact('cartItems', 'totalPrice', 'user'));
+    }
+
+    /**
+     * Зберігає замовлення в базі даних.
+     */
+    public function storeOrder(Request $request)
+    {
+        // Валідація даних з форми
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone_number' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+        ]);
+
+        $cartItems = [];
+        $totalPrice = 0;
+        $isUserLoggedIn = Auth::check();
+
+        if ($isUserLoggedIn) {
+            $cartItems = CartItem::with('product')->where('user_id', Auth::id())->get();
+        } else {
+            $sessionCart = Session::get('cart', []);
+            $productIds = collect($sessionCart)->pluck('product_id');
+            $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+
+            foreach ($sessionCart as $item) {
+                if ($products->has($item['product_id'])) {
+                    $cartItems[] = (object)[
+                        'product' => $products->get($item['product_id']),
+                        'quantity' => $item['quantity'],
+                    ];
+                }
+            }
+        }
+
+        // Перевірка, чи не порожній кошик перед збереженням
+        if (empty($cartItems) || count($cartItems) === 0) {
+            return redirect()->route('cart.index')->with('error', 'Ваш кошик порожній. Неможливо оформити замовлення.');
+        }
+
+        foreach ($cartItems as $item) {
+            $productPrice = $item->product->price ?? 0;
+            $quantity = $item->quantity ?? 0;
+            $totalPrice += $productPrice * $quantity;
+        }
+
+        // Створення нового замовлення
+        $order = Order::create([
+            'user_id' => $isUserLoggedIn ? Auth::id() : null,
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone_number' => $request->input('phone_number'),
+            'address' => $request->input('address'),
+            'total_price' => $totalPrice,
+            'status' => 'pending',
+        ]);
+
+        // Збереження товарів замовлення
+        foreach ($cartItems as $item) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product->id,
+                'quantity' => $item->quantity,
+                'price' => $item->product->price,
+            ]);
+        }
+
+        // Очищення кошика
+        if ($isUserLoggedIn) {
+            CartItem::where('user_id', Auth::id())->delete();
+        } else {
+            Session::forget('cart');
+        }
+
+        return redirect()->route('home')->with('success', 'Дякуємо за ваше замовлення! Ми зв\'яжемося з вами найближчим часом.');
     }
 }

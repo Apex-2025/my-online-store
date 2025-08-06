@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Category; // Додано
 
 class Product extends Model
 {
@@ -18,7 +20,15 @@ class Product extends Model
         'name',
         'description',
         'price',
-        'stock',
         'image',
+        'category_id', // Додано
     ];
+
+    /**
+     * Отримує категорію, до якої належить продукт.
+     */
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

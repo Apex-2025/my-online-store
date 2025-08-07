@@ -10,17 +10,7 @@ class OrderItem extends Model
 {
     use HasFactory;
 
-    /**
-     * Атрибути, які можна масово заповнювати.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'order_id',
-        'product_id',
-        'quantity',
-        'price',
-    ];
+    protected $guarded = [];
 
     /**
      * Отримує замовлення, до якого належить цей товар.
@@ -31,7 +21,7 @@ class OrderItem extends Model
     }
 
     /**
-     * Отримує продукт, який є частиною замовлення.
+     * Отримує продукт, який належить цьому товару замовлення.
      */
     public function product(): BelongsTo
     {

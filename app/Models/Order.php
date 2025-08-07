@@ -18,10 +18,10 @@ class Order extends Model
      */
     protected $fillable = [
         'user_id',
-        'name',
-        'email',
-        'phone_number',
-        'address',
+        'customer_name',
+        'customer_email',
+        'customer_phone',
+        'customer_address',
         'total_price',
         'status',
     ];
@@ -37,7 +37,7 @@ class Order extends Model
     /**
      * Отримує товари, які входять у замовлення.
      */
-    public function items(): HasMany
+    public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
     }

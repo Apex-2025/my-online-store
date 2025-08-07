@@ -1,18 +1,21 @@
 <nav>
     <div class="logo">
         <a href="{{ route('home') }}">
-            <!-- Використовуємо route('home') для посилання на головну сторінку -->
             <img src="{{ asset('images/my_logo.png') }}" alt="Логотип" class="h-10">
         </a>
     </div>
 
     <ul>
-        <!-- Використовуємо route('home') для посилання на продукти -->
-        <li><a href="{{ route('home') }}">Продукти</a></li>
+        {{-- Посилання на адмін-панель, видиме тільки для адміністраторів --}}
+        @can('admin')
+            <li><a href="{{ route('admin.dashboard') }}">Адмін-панель</a></li>
+        @endcan
+
+{{--        <li><a href="{{ route('home') }}">Головна</a></li>--}}
 
         {{-- Dropdown for Categories --}}
         <li class="has-dropdown">
-            <a href="{{ route('categories.index') }}">Категорії</a> {{-- Посилання на сторінку всіх категорій --}}
+            <a href="{{ route('categories.index') }}">Категорії</a>
             <ul class="dropdown-menu">
                 @foreach($categoriesNav as $category)
                     <li>
@@ -31,7 +34,17 @@
 
         <li><a href="{{ route('about') }}">Про нас</a></li>
         <li><a href="{{ route('contact') }}">Контакти</a></li>
-        <li><a href="{{ route('cart.index') }}">Кошик</a></li>
+        <li>
+            <a href="{{ route('cart.index') }}" class="relative inline-flex items-center">
+                Кошик
+                @if(isset($cartItemCount) && $cartItemCount > 0)
+                    <span class="ml-1 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+                {{ $cartItemCount }}
+            </span>
+                @endif
+            </a>
+        </li>
+
         @auth
             <li>
                 <form method="POST" action="{{ route('logout') }}">
@@ -48,4 +61,3 @@
         @endauth
     </ul>
 </nav>
-

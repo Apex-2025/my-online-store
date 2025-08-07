@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-use App\Http\Controllers\CartController;
+use Illuminate\Support\Facades\Session;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -26,13 +26,19 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // 1. Отримати дані кошика з поточної (гостьової) сесії
+        $guestCart = $request->session()->get('cart', []);
+
+        // 2. Виконати аутентифікацію
         $request->authenticate();
 
+        // 3. Відновити сесію
         $request->session()->regenerate();
 
-        // Викликаємо злиття кошика тут
-        $cartController = new CartController();
-        $cartController->mergeCart();
+        // 4. Перенести дані кошика в нову сесію
+        if (!empty($guestCart)) {
+            $request->session()->put('cart', $guestCart);
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

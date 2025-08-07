@@ -18,11 +18,6 @@ use App\Http\Controllers\Admin\AdminOrderController;
 // Головна сторінка, що показує список продуктів
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
-// Дашборд для авторизованих користувачів
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
-
 // Маршрути для профілю
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -41,7 +36,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 // Оновлення кількості товару в кошику
 Route::post('/cart/update', [CartController::class, 'update'])->name('cart.update');
 // Видалення товару з кошика
-Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
 
 // ---маршрути для статичних сторінок ---
 Route::get('/about-us', function () {
@@ -72,19 +67,16 @@ Route::post('/categories', [CategoryController::class, 'store'])->name('categori
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Головна сторінка адмін-панелі
     Route::get('/', function () {
-        return view('admin.dashboard'); // Ми створимо цей шаблон
+        return view('admin.dashboard');
     })->name('dashboard');
 
     // Маршрути для управління продуктами в адмін-панелі
-    // (Ми створимо AdminProductController пізніше)
     Route::resource('products', \App\Http\Controllers\Admin\AdminProductController::class);
 
     // Маршрути для управління категоріями в адмін-панелі
-    // (Ми створимо AdminCategoryController пізніше)
     Route::resource('categories', \App\Http\Controllers\Admin\AdminCategoryController::class);
 
     // Маршрути для управління замовленнями в адмін-панелі
-    // (Ми створимо AdminOrderController пізніше)
     Route::resource('orders', \App\Http\Controllers\Admin\AdminOrderController::class)->except(['create', 'store']); // Замовлення створюються через checkout
 });
 

@@ -5,6 +5,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    {{-- Компоненти для flash-повідомлень, які ми створили --}}
+                    @if(session('success'))
+                        <x-alert type="success" :message="session('success')" />
+                    @endif
+                    @if(session('error'))
+                        <x-alert type="error" :message="session('error')" />
+                    @endif
+
                     <h1 class="text-2xl font-bold mb-4">Адміністративна панель</h1>
                     <p>Ласкаво просимо до адмін-панелі! Тут ви можете керувати продуктами, категоріями та замовленнями.</p>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
@@ -12,7 +13,9 @@ class AdminOrderController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Order::with('user')->latest()->paginate(10);
+
+        return view('admin.orders.index', compact('orders'));
     }
 
     /**
@@ -34,9 +37,12 @@ class AdminOrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Order $order)
     {
-        //
+        // Завантажуємо пов'язані дані
+        $order->load('user', 'orderItems.product');
+
+        return view('admin.orders.show', compact('order'));
     }
 
     /**
@@ -50,16 +56,25 @@ class AdminOrderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Order $order)
     {
-        //
+        $request->validate([
+            'status' => 'required|in:pending,processing,completed,cancelled',
+        ]);
+
+        $order->update([
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('admin.orders.show', $order)->with('success', 'Статус замовлення успішно оновлено!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Order $order)
     {
-        //
+        // Реалізовувати видалення замовлень тут.
+        return redirect()->route('admin.orders.index')->with('error', 'Видалення замовлень не дозволено.');
     }
 }

@@ -22,16 +22,16 @@ h1, h2, h3 {
     margin-bottom: 15px;
 }
 
-a {
-    color: #007bff;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+/*a {*/
+/*    color: #007bff;*/
+/*    text-decoration: none;*/
+/*    transition: color 0.3s ease;*/
+/*}*/
 
-a:hover {
-    color: #0056b3;
-    text-decoration: underline;
-}
+/*a:hover {*/
+/*    color: #0056b3;*/
+/*    text-decoration: underline;*/
+/*}*/
 
 hr {
     border: 0;
@@ -46,49 +46,11 @@ hr {
     padding: 0 15px;
 }
 
-/* ----- Navigation Bar ----- */
-nav {
-    background-color: #AAA8A9;
-    color: #fff;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav .logo img {
-    height: 40px;
-}
-
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-nav ul li {
-    margin-left: 20px;
-    background-color: transparent;
-    box-shadow: none;
-    border: none;
-    padding: 0;
-}
-
-nav ul li a {
-    color: #fff;
-    font-weight: bold;
-}
-
-nav ul li a:hover {
-    color: #007bff;
-}
-
 /* ----- Product List Page Components ----- */
 .page-header {
-    background-color: #e0f2f7;
+    background-color: transparent;
     padding: 20px;
-    border-bottom: 1px solid #b3e0ed;
+    /*border-bottom: 1px solid #b3e0ed;*/
     margin-bottom: 30px;
     text-align: center;
 }
@@ -386,24 +348,73 @@ nav ul li a:hover {
     }
 }
 
-     /* Базові стилі для випадаючого меню */
- nav ul {
-     list-style: none;
-     padding: 0;
-     margin: 0;
- }
+/*
+ * Оновлені та об'єднані стилі для навігаційної панелі
+ */
+nav {
+    background-color: #AAA8A9;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .logo img {
+    height: 40px;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
 nav ul li {
+    margin-left: 20px;
+}
+
+/* Стилі для посилань основного меню */
+nav ul li .nav-link {
     position: relative;
-}
-nav ul li a {
-    display: block;
-    padding: 10px 15px; /* Адаптуйте під ваш дизайн */
+    padding: 10px 15px;
+    display: inline-block;
     text-decoration: none;
-    color: #333; /* Колір тексту для випадаючого меню */
-    white-space: nowrap; /* Щоб текст не переносився */
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s ease;
 }
-nav ul li a:hover {
-    background-color: #f0f0f0;
+
+/* Псевдоелемент для анімованого підкреслення основного меню */
+nav ul li .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #4a5568;
+    transform-origin: bottom left;
+    transition: transform 0.25s ease-out;
+}
+
+/* Анімація при наведенні або для активного посилання основного меню */
+nav ul li .nav-link:hover::after,
+nav ul li .active-nav-link::after {
+    transform: scaleX(1);
+}
+
+/* Стиль для активного посилання основного меню */
+nav ul li .active-nav-link {
+    color: #4a5568;
+    font-weight: 600;
+}
+
+/* Стилі для випадаючого меню (dropdown) */
+.has-dropdown {
+    position: relative;
 }
 
 .has-dropdown .dropdown-menu {
@@ -412,14 +423,64 @@ nav ul li a:hover {
     top: 100%;
     left: 0;
     background-color: white;
-    min-width: 200px; /* Збільшив ширину для кращого вигляду */
+    min-width: 200px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    border-radius: 5px; /* Додав заокруглення */
+    border-radius: 5px;
+    list-style: none;
 }
+
 .has-dropdown:hover > .dropdown-menu {
     display: block;
 }
+
+.has-dropdown .dropdown-menu li {
+    position: relative;
+    border-bottom: 1px solid #eee;
+}
+
+.has-dropdown .dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+/* Стилі для посилань у випадаючому меню */
+.has-dropdown .dropdown-menu a {
+    position: relative; /* Додаємо для позиціонування підкреслення */
+    display: block;
+    color: #333;
+    font-weight: normal;
+    padding: 10px 15px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* Псевдоелемент для анімованого підкреслення випадаючого меню */
+.has-dropdown .dropdown-menu a::after {
+    content: '';
+    position: absolute;
+    width: calc(100% - 20px);
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #4a5568;
+    transform-origin: bottom left;
+    transition: transform 0.25s ease-out;
+}
+
+/* Ефекти при наведенні для посилань випадаючого меню */
+.has-dropdown .dropdown-menu a:hover,
+.has-dropdown .dropdown-menu a.active-nav-link {
+    color: #4a5568; /* Колір тексту стає темно-сірим */
+    background-color: transparent;
+}
+
+.has-dropdown .dropdown-menu a:hover::after,
+.has-dropdown .dropdown-menu a.active-nav-link::after {
+    transform: scaleX(1); /* Підкреслення з'являється */
+}
+
+/* Стилі для підменю */
 .has-dropdown .dropdown-menu .submenu {
     display: none;
     position: absolute;
@@ -429,17 +490,13 @@ nav ul li a:hover {
     min-width: 200px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    list-style: none;
 }
+
 .has-dropdown .dropdown-menu li:hover > .submenu {
     display: block;
 }
-.has-dropdown .dropdown-menu li {
-    border-bottom: 1px solid #eee; /* Розділювач між пунктами */
-}
-.has-dropdown .dropdown-menu li:last-child {
-    border-bottom: none;
-}
+
 .has-dropdown .dropdown-menu .submenu li a {
-    padding-left: 25px; /* Відступ для підкатегорій */
-    color: #555;
+    padding-left: 25px;
 }

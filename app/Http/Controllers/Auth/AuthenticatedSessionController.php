@@ -26,16 +26,16 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        // 1. Отримати дані кошика з поточної (гостьової) сесії
+        // Отримати дані кошика з поточної (гостьової) сесії
         $guestCart = $request->session()->get('cart', []);
 
-        // 2. Виконати аутентифікацію
+        // Виконати аутентифікацію
         $request->authenticate();
 
-        // 3. Відновити сесію
+        // Відновити сесію
         $request->session()->regenerate();
 
-        // 4. Перенести дані кошика в нову сесію
+        // Перенести дані кошика в нову сесію
         if (!empty($guestCart)) {
             $request->session()->put('cart', $guestCart);
         }
